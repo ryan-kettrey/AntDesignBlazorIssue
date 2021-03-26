@@ -26,6 +26,7 @@
 
 @code
 {
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class NotLettuceAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -45,8 +46,8 @@
         [NotLettuce]
         public string FavoriteFood1 { get; set; }
 
-        [NotLettuce]
-        public string FavoriteFood2 { get; set; } = "Pizza";
+        [Required]
+        public string FavoriteFood2 { get; set; }
 
         [NotLettuce]
         public string FavoriteFood3 { get; set; } = "Lettuce";
