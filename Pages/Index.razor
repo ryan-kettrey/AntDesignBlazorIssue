@@ -1,0 +1,63 @@
+﻿@page "/"
+
+@using System.ComponentModel.DataAnnotations;
+
+<Form Model="@model"
+      LabelColSpan="8"
+      WrapperColSpan="16"
+      ValidateOnChange="true"
+      @ref="form">
+    <FormItem Label="Favorite Food 1">
+        <Input @bind-Value="@context.FavoriteFood1" />
+    </FormItem>
+    <FormItem Label="Favorite Food 2">
+        <Input @bind-Value="@context.FavoriteFood2" />
+    </FormItem>
+    <FormItem Label="Favorite Food 3">
+        <Input @bind-Value="@context.FavoriteFood3" />
+    </FormItem>
+    <FormItem WrapperColOffset="8" WrapperColSpan="16">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">Submit</Button>
+        <Button OnClick="TestValidate">Test Manual Validate</Button>
+    </FormItem>
+
+    <ValidationSummary />
+</Form>
+
+@code
+{
+    public class NotLettuceAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value == null || !(value is string))
+                return ValidationResult.Success;
+
+            if ("Lettuce" == (value as string))
+                return new ValidationResult("Can not be Lettuce");
+
+            return ValidationResult.Success;
+        }
+    }
+
+    public class Model
+    {
+        [NotLettuce]
+        public string FavoriteFood1 { get; set; }
+
+        [NotLettuce]
+        public string FavoriteFood2 { get; set; } = "Pizza";
+
+        [NotLettuce]
+        public string FavoriteFood3 { get; set; } = "Lettuce";
+    }
+
+    private Model model = new Model();
+
+    private Form<Model> form { get; set; }
+
+    public void TestValidate()
+    {
+        form.Validate();
+    }
+}
